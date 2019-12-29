@@ -10,7 +10,7 @@ const request = require('request-promise');
 const bodyParser = require('body-parser');
 const apiKey = process.env.SHOPIFY_API_KEY;
 const apiSecret = process.env.SHOPIFY_API_SECRET;
-const forwardingAddress = 'https://bell.ml'; // Replace this with your HTTPS Forwarding address
+const forwardingAddress = 'https://cryptic-brushlands-45627.herokuapp.com'; // Replace this with your HTTPS Forwarding address
 
 // db
 mongoose
