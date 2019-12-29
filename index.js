@@ -11,11 +11,6 @@ const bodyParser = require('body-parser');
 const apiKey = process.env.SHOPIFY_API_KEY;
 const apiSecret = process.env.SHOPIFY_API_SECRET;
 const forwardingAddress = 'https://bell.ml'; // Replace this with your HTTPS Forwarding address
-//////////////////
-//////////////////
-
-// app
-const app = express();
 
 // db
 mongoose
