@@ -1,5 +1,7 @@
 require('dotenv').config();
 const express = require('express');
+const session = require('express-session');
+
 const mongoose = require('mongoose');
 const app = express();
 const crypto = require('crypto');
@@ -7,33 +9,25 @@ const cookie = require('cookie');
 const nonce = require('nonce')();
 const querystring = require('querystring');
 const request = require('request-promise');
-const bodyParser = require('body-parser');
 const apiKey = process.env.SHOPIFY_API_KEY;
 const apiSecret = process.env.SHOPIFY_API_SECRET;
 const forwardingAddress = 'https://cryptic-brushlands-45627.herokuapp.com'; // Replace this with your HTTPS Forwarding address
 
 // db
-mongoose
-	.connect(process.env.DATABASE, {
-		useNewUrlParser: true,
-		useCreateIndex: true,
-		useUnifiedTopology: true
-	})
-	.then(() => console.log('DB Connected'));
+const connectDB = require('./connectDB');
+
+connectDB();
 
 // middlewares
-app.use(bodyParser.json());
-app.use(
-	bodyParser.urlencoded({
-		extended: true
-	})
-);
+app.use(express.json());
 
 app.get('/get', (req, res) => {
 	res.send('hi there!');
 });
 
-let accessTokenResponsetry = '';
+let tokenRem = '';
+let hmacRem = '';
+let shopRem = '';
 
 //install route
 app.get('/shopify', (req, res) => {
@@ -63,6 +57,10 @@ app.get('/shopify', (req, res) => {
 //callback route
 app.get('/shopify/callback', (req, res) => {
 	let { shop, hmac, code, state } = req.query;
+
+	hmacRem = hmac;
+	shopRem = shop;
+
 	const stateCookie = cookie.parse(req.headers.cookie)[`${shop}`];
 	if (state !== stateCookie) {
 		return res.status(403).send('Request origin cannot be verified');
@@ -95,7 +93,7 @@ app.get('/shopify/callback', (req, res) => {
 			})
 			.then((accessTokenResponse) => {
 				console.log(accessTokenResponse);
-				accessTokenResponsetry = accessTokenResponse;
+				tokenRem = accessTokenResponse;
 				res.redirect('/');
 			})
 			.catch((error) => {
@@ -114,8 +112,11 @@ app.get('/customers', (req, res) => {
 		url: url,
 		json: true,
 		headers: {
-			'X-Shopify.Access.Token': accessTokenResponsetry,
-			'content-type': 'application/json'
+			'Content-Type': 'application/json',
+			'X-Shopify-Access-Token': tokenRem,
+			'X-Shopify-Hmac-Sha256': hmacRem,
+			'X-Shopify-Shop-Domain': shopRem,
+			'X-Shopify-API-Version': '2019-07'
 		}
 	};
 
