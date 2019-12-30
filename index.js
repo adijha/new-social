@@ -105,7 +105,7 @@ app.get('/shopify/callback', (req, res) => {
 });
 
 app.get('/customers', (req, res) => {
-	let url = 'https://' + shopRem + '/admin/api/2019-10/customers.json';
+	let url = 'https://' + shopRem + '/admin/api/2019-10/customers/count.json';
 
 	let options = {
 		method: 'GET',
