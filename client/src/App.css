@@ -1,4 +1,6 @@
 .login-btn {
 	color: whitesmoke;
 	background-color: red;
+	height: 30;
+	width: 100;
 }
