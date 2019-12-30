@@ -17,7 +17,7 @@ function App() {
 	return (
 		<div className='App'>
 			<h1>gogomaster</h1>
-			<button onClick={getdata}> get data </button>
+			<button className='login-btn' onClick={getdata}> get data </button>
 		</div>
 	);
 }

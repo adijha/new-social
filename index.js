@@ -41,7 +41,7 @@ app.get('/shopify', (req, res) => {
 			'/admin/oauth/authorize?client_id=' +
 			apiKey +
 			'&scope=' +
-			[ 'read_customers', 'write_customers' ] +
+			[ 'read_customers', 'write_customers', 'unauthenticated_write_customers', 'unauthenticated_read_customers' ] +
 			'&state=' +
 			state +
 			'&redirect_uri=' +
