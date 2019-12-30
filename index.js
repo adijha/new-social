@@ -122,11 +122,11 @@ app.get('/customers', (req, res) => {
 	request(options)
 		.then((parsebody) => {
 			console.log(parsebody);
-			res.statusCode(200).send('good');
+			res.send('good');
 		})
 		.catch((err) => {
-			console.error(error);
-			res.statusCode(500).send('somehow good');
+			console.error(err);
+			res.send('somehow good');
 		});
 });
 
