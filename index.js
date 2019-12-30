@@ -33,9 +33,7 @@ app.get('/get', (req, res) => {
 	res.send('hi there!');
 });
 
-// app.get('/', (req, res) => {
-// 	res.send('isntall seccessfully!');
-// });
+let accessTokenResponsetry = '';
 
 //install route
 app.get('/shopify', (req, res) => {
@@ -97,6 +95,7 @@ app.get('/shopify/callback', (req, res) => {
 			})
 			.then((accessTokenResponse) => {
 				console.log(accessTokenResponse);
+				accessTokenResponsetry = accessTokenResponse;
 				res.redirect('/');
 			})
 			.catch((error) => {
@@ -107,6 +106,30 @@ app.get('/shopify/callback', (req, res) => {
 	}
 });
 
+app.get('/customers', (req, res) => {
+	let url = 'https://demo-mojito.myshopify.com/admin/api/2019-10/customers.json';
+
+	let options = {
+		method: 'GET',
+		url: url,
+		json: true,
+		headers: {
+			'X-Shopify.Access.Token': accessTokenResponsetry,
+			'content-type': 'application/json'
+		}
+	};
+
+	request(options)
+		.then((parsebody) => {
+			console.log(parsebody);
+			res.statusCode(200).send('good');
+		})
+		.catch((err) => {
+			console.error(error);
+			res.statusCode(500).send('somehow good');
+		});
+});
+
 const port = process.env.PORT || 8000;
 
 if (process.env.NODE_ENV === 'production') {
@@ -115,8 +138,6 @@ if (process.env.NODE_ENV === 'production') {
 		res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
 	});
 }
-
-
 
 app.listen(port, () => {
 	console.log(`Server is running on port ${port}`);
