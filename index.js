@@ -105,7 +105,7 @@ app.get('/shopify/callback', (req, res) => {
 });
 
 app.get('/customers', (req, res) => {
-	let url = 'https://demo-mojito.myshopify.com/admin/api/2019-10/customers.json';
+	let url = 'https://' + shopRem + '/admin/api/2019-10/customers.json';
 
 	let options = {
 		method: 'GET',
@@ -116,7 +116,7 @@ app.get('/customers', (req, res) => {
 			'X-Shopify-Access-Token': tokenRem,
 			'X-Shopify-Hmac-Sha256': hmacRem,
 			'X-Shopify-Shop-Domain': shopRem,
-			'X-Shopify-API-Version': '2019-07'
+			'X-Shopify-API-Version': '2019-10'
 		}
 	};
 
