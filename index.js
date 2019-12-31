@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
-
+const colors = require('colors');
 const mongoose = require('mongoose');
 const app = express();
 const crypto = require('crypto');
@@ -11,7 +11,7 @@ const querystring = require('querystring');
 const request = require('request-promise');
 const apiKey = process.env.SHOPIFY_API_KEY;
 const apiSecret = process.env.SHOPIFY_API_SECRET;
-const forwardingAddress = 'https://cryptic-brushlands-45627.herokuapp.com'; // Replace this with your HTTPS Forwarding address
+const forwardingAddress = 'https://2fca9a52.ngrok.io'; // Replace this with your HTTPS Forwarding address
 
 // db
 const connectDB = require('./connectDB');
@@ -104,7 +104,18 @@ app.get('/shopify/callback', (req, res) => {
 	}
 });
 
-app.get('/customers', (req, res) => {
+app.get('/customers', async (req, res) => {
+	tokenRem = JSON.stringify(tokenRem);
+	console.log(tokenRem);
+	console.log(typeof tokenRem, 'tokenRem'.red);
+
+	console.log(hmacRem);
+	console.log(typeof hmacRem, 'hmacREM'.red);
+
+	console.log(shopRem);
+	console.log(typeof shopRem, 'shopREM'.red);
+
+	console.log(tokenRem, hmacRem, shopRem, 'vars'.cyan);
 	let url = 'https://' + shopRem + '/admin/api/2019-10/customers/count.json';
 
 	let options = {
@@ -121,8 +132,8 @@ app.get('/customers', (req, res) => {
 	};
 
 	request(options)
-		.then((parsebody) => {
-			console.log(parsebody);
+		.then((res) => {
+			console.log(res);
 			res.send('good');
 		})
 		.catch((err) => {
@@ -133,12 +144,12 @@ app.get('/customers', (req, res) => {
 
 const port = process.env.PORT || 8000;
 
-if (process.env.NODE_ENV === 'production') {
-	app.use(express.static('client/build'));
-	app.get('*', (req, res) => {
-		res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-	});
-}
+// if (process.env.NODE_ENV === 'production') {
+app.use(express.static('client/build'));
+app.get('*', (req, res) => {
+	res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+});
+// }
 
 app.listen(port, () => {
 	console.log(`Server is running on port ${port}`);
